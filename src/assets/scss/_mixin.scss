@@ -1,0 +1,19 @@
+@import "./constants";
+
+@mixin borders($left-top: $lightBorder, $right-bottom: $darkBorder) {
+  border-bottom-color: $right-bottom;
+  border-left-color: $left-top;
+  border-right-color: $right-bottom;
+  border-style: solid;
+  border-top-color: $left-top;
+  border-width: 4px;
+}
+
+@mixin buttons {
+  &:active {
+    border-bottom-color: $lightBorder;
+    border-left-color: $darkBorder;
+    border-right-color: $lightBorder;
+    border-top-color: $darkBorder;
+  }
+}
