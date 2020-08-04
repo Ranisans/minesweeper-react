@@ -25,7 +25,7 @@ const Button: React.FC<BProps> = ({
 }: BProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderedContent: any = () => {
-    if (state === CellState.visible) {
+    if (state === CellState.hidden) {
       if (value === CellValue.bomb) {
         return (
           <span role="img" aria-label="bomb">
@@ -51,7 +51,7 @@ const Button: React.FC<BProps> = ({
   return (
     <div
       className={`button ${
-        state === CellState.visible ? "button--visible" : ""
+        state === CellState.hidden ? "button--visible" : ""
       } button-value-${value} ${red ? "button-red" : ""}
     `}
       role="button"

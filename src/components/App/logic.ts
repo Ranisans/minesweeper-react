@@ -1,23 +1,22 @@
-import { CellState, CellValue } from "../../types";
-
-interface IProps {
-  rows: number;
-  cols: number;
-}
+import { CellState, CellValue, Cell } from "../../types";
 
 class GameFieldGenerator {
   private rows: number;
 
   private cols: number;
 
-  private gameField: CellValue[][];
+  private gameField: Cell[][];
 
   constructor(rows: number, cols: number) {
     this.rows = rows;
     this.cols = cols;
     this.gameField = new Array(rows)
       .fill(null)
-      .map(() => new Array(cols).fill(null));
+      .map(() =>
+        new Array(cols)
+          .fill(null)
+          .map(() => ({ value: 0, state: CellState.hidden }))
+      );
   }
 
   private generateBombs(): void {
@@ -27,48 +26,34 @@ class GameFieldGenerator {
       const cellId = Math.floor(Math.random() * cellCount);
       const bombRow = Math.floor(cellId / this.rows);
       const bombCol = cellId % this.rows;
-      if (this.gameField[bombRow][bombCol] === CellValue.bomb) {
+      if (this.gameField[bombRow][bombCol].value === CellValue.bomb) {
         i -= 1;
       } else {
-        this.gameField[bombRow][bombCol] = CellValue.bomb;
+        this.gameField[bombRow][bombCol].value = CellValue.bomb;
+        this.increaseNumberOfBombsInAdjacentCells(bombRow, bombCol);
       }
     }
   }
 
-  private bombsInContiguouslyCells(row: number, col: number): CellValue {
-    let bombCount = 0;
-    const findInRow = (rowToFind: number): number => {
-      let result = 0;
-      for (
-        let i = col - 1;
-        i <= col + 1 && i < this.gameField[0].length;
-        i += 1
-      ) {
-        if (i >= 0) {
-          if (this.gameField[rowToFind][i] === CellValue.bomb) {
-            result += 1;
+  private increaseNumberOfBombsInAdjacentCells(row: number, col: number) {
+    for (let i = row - 1; i <= row + 1 && i < this.gameField.length; i += 1) {
+      if (i >= 0) {
+        for (
+          let j = col - 1;
+          j <= col + 1 && j < this.gameField[i].length;
+          j += 1
+        ) {
+          if (j >= 0 && this.gameField[i][j].value !== CellValue.bomb) {
+            this.gameField[i][j].value += 1;
           }
         }
       }
-      return result;
-    };
-    for (let i = row - 1; i < this.gameField.length && i <= row + 1; i += 1) {
-      if (i >= 0) {
-        bombCount += findInRow(i);
-      }
     }
-    return bombCount;
   }
 
-  public generate(): CellValue[][] {
+  public generate(): Cell[][] {
     this.generateBombs();
-    for (let row = 0; row < this.rows; row += 1) {
-      for (let col = 0; col < this.cols; col += 1) {
-        if (this.gameField[row][col] !== CellValue.bomb) {
-          this.gameField[row][col] = this.bombsInContiguouslyCells(row, col);
-        }
-      }
-    }
+
     return this.gameField;
   }
 }

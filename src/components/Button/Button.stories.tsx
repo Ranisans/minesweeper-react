@@ -34,7 +34,7 @@ export const Visible: React.FC = () => {
       row={0}
       onClick={callback}
       onContext={callback}
-      state={CellState.visible}
+      state={CellState.hidden}
       value={CellValue.five}
     />
   );
@@ -60,7 +60,7 @@ export const Bomb: React.FC = () => {
       row={0}
       onClick={callback}
       onContext={callback}
-      state={CellState.visible}
+      state={CellState.hidden}
       value={CellValue.bomb}
     />
   );
@@ -73,7 +73,7 @@ export const ExplodedBomb: React.FC = () => {
       row={0}
       onClick={callback}
       onContext={callback}
-      state={CellState.visible}
+      state={CellState.hidden}
       value={CellValue.bomb}
       red
     />
