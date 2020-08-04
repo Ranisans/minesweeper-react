@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import Button from "../Button";
+import Display from "../Display";
 import {
   GameFieldGenerator,
   updateCellState,
@@ -8,29 +10,37 @@ import {
 } from "./logic";
 
 import { MIN_COLS, MIN_ROWS, MIN_BOMB_COUNT } from "../../constants";
-import { Cell, CellState } from "../../types";
+import { Cell, CellState, Face } from "../../types";
 
 import "./App.scss";
-import Button from "../Button";
 
 const App: React.FC = () => {
   const [cells, setCells] = useState<Cell[][]>([]);
   const [gameFinished, setGameFinished] = useState<boolean>(false);
   const [bombCount, setBombCount] = useState<number>(MIN_BOMB_COUNT);
+  const [emoticon, setEmoticon] = useState<Face>(Face.smile);
 
-  useEffect(() => {
+  const restart = () => {
     const newCells = new GameFieldGenerator(
       MIN_ROWS,
       MIN_COLS,
       MIN_BOMB_COUNT
     ).generate();
     setCells(newCells);
+    setBombCount(MIN_BOMB_COUNT);
+    setEmoticon(Face.smile);
+    setGameFinished(false);
+  };
+
+  useEffect(() => {
+    restart();
   }, []);
 
   useEffect(() => {
     if (bombCount === 0) {
       if (isAllBombMarked(cells)) {
         setGameFinished(true);
+        setEmoticon(Face.won);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,6 +53,7 @@ const App: React.FC = () => {
         setCells(newCells);
         if (isEnd) {
           setGameFinished(true);
+          setEmoticon(Face.lost);
         }
       }
     }
@@ -53,9 +64,9 @@ const App: React.FC = () => {
       if (cells[row][col].state !== CellState.open) {
         setCells(setFlagToCell(cells, row, col));
         if (cells[row][col].state === CellState.flagged) {
-          setBombCount(bombCount + 1);
-        } else {
           setBombCount(bombCount - 1);
+        } else {
+          setBombCount(bombCount + 1);
         }
       }
     }
@@ -63,7 +74,21 @@ const App: React.FC = () => {
 
   return (
     <div className="APP">
-      <div className="header">{bombCount}</div>
+      <div className="header">
+        <Display value={bombCount} />
+        <div
+          role="button"
+          tabIndex={0}
+          className="header-emoticon"
+          aria-label="face"
+          onKeyPress={restart}
+          onClick={restart}
+        >
+          <span role="img" aria-label="face">
+            {emoticon}
+          </span>
+        </div>
+      </div>
       <div className="game_field">
         {cells.map((row, rowIndex) =>
           row.map((col, colIndex) => (

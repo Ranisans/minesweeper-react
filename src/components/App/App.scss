@@ -10,11 +10,26 @@
 }
 
 .header {
+  display: flex;
+  justify-content: space-around;
   padding: 10px 12px;
 
   background: #c0c0c0;
 
   @include borders($darkBorder, $lightBorder);
+
+  &-emoticon {
+    @include borders;
+    @include buttons;
+    user-select: none;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-size: 35px;
+    height: 52px;
+    justify-content: center;
+    width: 52px;
+  }
 }
 
 .game_field {
