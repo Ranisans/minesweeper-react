@@ -5,11 +5,14 @@ export class GameFieldGenerator {
 
   private cols: number;
 
+  private bombCount: number;
+
   private gameField: Cell[][];
 
-  constructor(rows: number, cols: number) {
+  constructor(rows: number, cols: number, bombCount: number) {
     this.rows = rows;
     this.cols = cols;
+    this.bombCount = bombCount;
     this.gameField = new Array(rows)
       .fill(null)
       .map(() =>
@@ -21,8 +24,7 @@ export class GameFieldGenerator {
 
   private generateBombs(): void {
     const cellCount = this.rows * this.cols;
-    const mineCount = Math.floor(Math.sqrt(cellCount)) + 1;
-    for (let i = 0; i < mineCount; i += 1) {
+    for (let i = 0; i < this.bombCount; i += 1) {
       const cellId = Math.floor(Math.random() * cellCount);
       const bombRow = Math.floor(cellId / this.rows);
       const bombCol = cellId % this.rows;
@@ -58,7 +60,7 @@ export class GameFieldGenerator {
   }
 }
 
-const updateAllBombState = (cells: Cell[][]) => {
+export const updateAllBombState = (cells: Cell[][]): void => {
   for (let i = 0; i < cells.length; i += 1) {
     for (let j = 0; j < cells[i].length; j += 1) {
       if (cells[i][j].value === CellValue.bomb) {
@@ -74,11 +76,11 @@ interface Position {
   col: number;
 }
 
-const openAllAdjacentEmptyCells = (
+export const openAllAdjacentEmptyCells = (
   cells: Cell[][],
   row: number,
   col: number
-) => {
+): void => {
   const query: Position[] = [];
   const adjoiningCells = [
     [-1, 0],
