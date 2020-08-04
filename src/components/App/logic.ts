@@ -1,6 +1,6 @@
 import { CellState, CellValue, Cell } from "../../types";
 
-class GameFieldGenerator {
+export class GameFieldGenerator {
   private rows: number;
 
   private cols: number;
@@ -58,4 +58,29 @@ class GameFieldGenerator {
   }
 }
 
-export default GameFieldGenerator;
+export const updateCellState = (
+  cells: Cell[][],
+  row: number,
+  col: number
+): [Cell[][], boolean] => {
+  const newCells = [...cells];
+  const selectedCell = newCells[row][col];
+  selectedCell.state = CellState.open;
+  if (selectedCell.value === CellValue.bomb) {
+    selectedCell.red = true;
+  }
+  return [newCells, false];
+};
+
+export const setFlagToCell = (
+  cells: Cell[][],
+  row: number,
+  col: number
+): Cell[][] => {
+  const newCells = [...cells];
+  newCells[row][col].state =
+    newCells[row][col].state === CellState.flagged
+      ? CellState.closed
+      : CellState.flagged;
+  return newCells;
+};

@@ -51,6 +51,7 @@ const Button: React.FC<BProps> = ({
         state === CellState.open ? "button--visible" : ""
       } button-value-${value} ${red ? "button-red" : ""}
     `}
+      style={{ gridRow: row + 1, gridColumn: col + 1 }}
       role="button"
       tabIndex={0}
       aria-label="button"
@@ -58,7 +59,8 @@ const Button: React.FC<BProps> = ({
         onClick(row, col);
       }}
       onKeyPress={() => {}}
-      onContextMenu={() => {
+      onContextMenu={(e) => {
+        e.preventDefault();
         onContext(row, col);
       }}
     >
