@@ -19,6 +19,7 @@ const App: React.FC = () => {
   const [gameFinished, setGameFinished] = useState<boolean>(false);
   const [bombCount, setBombCount] = useState<number>(MIN_BOMB_COUNT);
   const [emoticon, setEmoticon] = useState<Face>(Face.smile);
+  const [time, setTime] = useState<number>(0);
 
   const restart = () => {
     const newCells = new GameFieldGenerator(
@@ -30,6 +31,7 @@ const App: React.FC = () => {
     setBombCount(MIN_BOMB_COUNT);
     setEmoticon(Face.smile);
     setGameFinished(false);
+    setTime(0);
   };
 
   useEffect(() => {
@@ -45,6 +47,18 @@ const App: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bombCount]);
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (!gameFinished && time < 999) {
+      const timer = setInterval(() => {
+        setTime(time + 1);
+      }, 1000);
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [gameFinished, time]);
 
   const onClick = (row: number, col: number) => {
     if (!gameFinished) {
@@ -88,6 +102,7 @@ const App: React.FC = () => {
             {emoticon}
           </span>
         </div>
+        <Display value={time} />
       </div>
       <div className="game_field">
         {cells.map((row, rowIndex) =>
