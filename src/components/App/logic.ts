@@ -15,7 +15,7 @@ class GameFieldGenerator {
       .map(() =>
         new Array(cols)
           .fill(null)
-          .map(() => ({ value: 0, state: CellState.hidden }))
+          .map(() => ({ value: 0, state: CellState.closed }))
       );
   }
 

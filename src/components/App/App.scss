@@ -1,34 +1,28 @@
-@import '../../assets/scss/constants';
+@import "../../assets/scss/constants";
+@import "../../assets/scss/mixin";
 
 .APP {
-  background: $backgroundColor;
   padding: 16px;
-  border-width: $borderSize;
-  border-style: solid;
-  border-right-color: $darkBorder;
-  border-bottom-color: $darkBorder;
-  border-left-color: $lightBorder;
-  border-top-color: $lightBorder;
+
+  background: $backgroundColor;
+
+  @include borders;
 }
 
 .header {
-  background: #c0c0c0;
   padding: 10px 12px;
-  border-width: $borderSize;
-  border-style: solid;
-  border-right-color: $lightBorder;
-  border-bottom-color: $lightBorder;
-  border-left-color: $darkBorder;
-  border-top-color: $darkBorder;
+
+  background: #c0c0c0;
+
+  @include borders($darkBorder, $lightBorder);
 }
 
 .game_field {
   margin-top: 16px;
+
+  display: grid;
+
   background: #c0c0c0;
-  border-width: $borderSize;
-  border-style: solid;
-  border-right-color: $lightBorder;
-  border-bottom-color: $lightBorder;
-  border-left-color: $darkBorder;
-  border-top-color: $darkBorder;
+
+  @include borders($darkBorder, $lightBorder);
 }

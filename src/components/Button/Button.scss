@@ -1,22 +1,27 @@
 @import "../../assets/scss/mixin";
 
 .button {
-  @include borders;
-  @include buttons;
-  width: 30px;
-  height: 30px;
-  align-items: center;
   display: flex;
+  align-items: center;
   justify-content: center;
 
+  width: 30px;
+  height: 30px;
+
+  user-select: none;
+
+  @include borders;
+  @include buttons;
+
   span {
-    font-size: 12px;
     margin-left: 2px;
+
+    font-size: 12px;
   }
 
   &--visible {
-    border-color: $darkBorder;
     border-width: 1px;
+    border-color: $darkBorder;
   }
   &-red {
     background-color: red;

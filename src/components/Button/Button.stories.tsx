@@ -21,8 +21,7 @@ export const Base: React.FC = () => {
       row={0}
       onClick={callback}
       onContext={callback}
-      state={CellState.open}
-      value={CellValue.eight}
+      data={{ state: CellState.closed, value: CellValue.eight }}
     />
   );
 };
@@ -34,8 +33,7 @@ export const Visible: React.FC = () => {
       row={0}
       onClick={callback}
       onContext={callback}
-      state={CellState.hidden}
-      value={CellValue.five}
+      data={{ state: CellState.open, value: CellValue.five }}
     />
   );
 };
@@ -47,8 +45,7 @@ export const Flagged: React.FC = () => {
       row={0}
       onClick={callback}
       onContext={callback}
-      state={CellState.flagged}
-      value={CellValue.four}
+      data={{ state: CellState.flagged, value: CellValue.four }}
     />
   );
 };
@@ -60,8 +57,7 @@ export const Bomb: React.FC = () => {
       row={0}
       onClick={callback}
       onContext={callback}
-      state={CellState.hidden}
-      value={CellValue.bomb}
+      data={{ state: CellState.open, value: CellValue.bomb }}
     />
   );
 };
@@ -73,9 +69,7 @@ export const ExplodedBomb: React.FC = () => {
       row={0}
       onClick={callback}
       onContext={callback}
-      state={CellState.hidden}
-      value={CellValue.bomb}
-      red
+      data={{ state: CellState.open, value: CellValue.bomb, red: true }}
     />
   );
 };

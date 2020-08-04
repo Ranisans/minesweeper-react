@@ -1,13 +1,11 @@
 import React from "react";
 
-import { CellState, CellValue } from "../../types";
+import { CellState, CellValue, Cell } from "../../types";
 
 import "./Button.scss";
 
 interface BProps {
-  value: CellValue;
-  state: CellState;
-  red?: boolean;
+  data: Cell;
   row: number;
   col: number;
   onClick: (row: number, col: number) => void;
@@ -15,17 +13,16 @@ interface BProps {
 }
 
 const Button: React.FC<BProps> = ({
-  value,
-  state,
-  red,
+  data,
   col,
   row,
   onClick,
   onContext,
 }: BProps) => {
+  const { state, value, red } = data;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderedContent: any = () => {
-    if (state === CellState.hidden) {
+    if (state === CellState.open) {
       if (value === CellValue.bomb) {
         return (
           <span role="img" aria-label="bomb">
@@ -51,7 +48,7 @@ const Button: React.FC<BProps> = ({
   return (
     <div
       className={`button ${
-        state === CellState.hidden ? "button--visible" : ""
+        state === CellState.open ? "button--visible" : ""
       } button-value-${value} ${red ? "button-red" : ""}
     `}
       role="button"
