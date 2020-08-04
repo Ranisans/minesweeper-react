@@ -69,6 +69,45 @@ const updateAllBombState = (cells: Cell[][]) => {
   }
 };
 
+interface Position {
+  row: number;
+  col: number;
+}
+
+const openAllAdjacentEmptyCells = (
+  cells: Cell[][],
+  row: number,
+  col: number
+) => {
+  const query: Position[] = [];
+  const adjoiningCells = [
+    [-1, 0],
+    [0, -1],
+    [0, 1],
+    [1, 0],
+  ];
+  query.push({ row, col });
+
+  for (let i = 0; i < query.length; i += 1) {
+    const { row: x, col: y } = query[i];
+    // eslint-disable-next-line no-param-reassign
+    cells[x][y].state = CellState.open;
+    for (let j = 0; j < adjoiningCells.length; j += 1) {
+      const [addX, addY] = adjoiningCells[j];
+      if (
+        x + addX >= 0 &&
+        x + addX < cells.length &&
+        y + addY >= 0 &&
+        y + addY < cells[x + addX].length &&
+        cells[x + addX][y + addY].state !== CellState.open &&
+        cells[x + addX][y + addY].value === CellValue.none
+      ) {
+        query.push({ row: x + addX, col: y + addY });
+      }
+    }
+  }
+};
+
 export const updateCellState = (
   cells: Cell[][],
   row: number,
@@ -78,11 +117,15 @@ export const updateCellState = (
   const newCells = [...cells];
 
   const selectedCell = newCells[row][col];
-  selectedCell.state = CellState.open;
-  if (selectedCell.value === CellValue.bomb) {
+  if (selectedCell.value === CellValue.none) {
+    openAllAdjacentEmptyCells(newCells, row, col);
+  } else if (selectedCell.value === CellValue.bomb) {
     selectedCell.red = true;
     isEnd = true;
     updateAllBombState(cells);
+    selectedCell.state = CellState.open;
+  } else {
+    selectedCell.state = CellState.open;
   }
   return [newCells, isEnd];
 };
