@@ -58,18 +58,33 @@ export class GameFieldGenerator {
   }
 }
 
+const updateAllBombState = (cells: Cell[][]) => {
+  for (let i = 0; i < cells.length; i += 1) {
+    for (let j = 0; j < cells[i].length; j += 1) {
+      if (cells[i][j].value === CellValue.bomb) {
+        // eslint-disable-next-line no-param-reassign
+        cells[i][j].state = CellState.open;
+      }
+    }
+  }
+};
+
 export const updateCellState = (
   cells: Cell[][],
   row: number,
   col: number
 ): [Cell[][], boolean] => {
+  let isEnd = false;
   const newCells = [...cells];
+
   const selectedCell = newCells[row][col];
   selectedCell.state = CellState.open;
   if (selectedCell.value === CellValue.bomb) {
     selectedCell.red = true;
+    isEnd = true;
+    updateAllBombState(cells);
   }
-  return [newCells, false];
+  return [newCells, isEnd];
 };
 
 export const setFlagToCell = (
