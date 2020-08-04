@@ -144,3 +144,17 @@ export const setFlagToCell = (
       : CellState.flagged;
   return newCells;
 };
+
+export const isAllBombMarked = (cells: Cell[][]): boolean => {
+  for (let i = 0; i < cells.length; i += 1) {
+    for (let j = 0; j < cells[i].length; j += 1) {
+      if (
+        cells[i][j].value === CellValue.bomb &&
+        cells[i][j].state !== CellState.open
+      ) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
