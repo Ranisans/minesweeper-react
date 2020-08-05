@@ -107,7 +107,14 @@ describe("game field generator", () => {
   });
   it("should return true if all bombs are marked", () => {
     const newCells: Cell[][] = JSON.parse(JSON.stringify(cells));
-    updateAllBombState(newCells);
+    for (let i = 0; i < newCells.length; i += 1) {
+      for (let j = 0; j < newCells[i].length; j += 1) {
+        if (newCells[i][j].value === CellValue.bomb) {
+          // eslint-disable-next-line no-param-reassign
+          newCells[i][j].state = CellState.flagged;
+        }
+      }
+    }
     const result = isAllBombMarked(newCells);
     expect(result).toBe(true);
   });

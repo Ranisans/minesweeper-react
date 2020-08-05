@@ -147,7 +147,7 @@ export const isAllBombMarked = (cells: Cell[][]): boolean => {
     for (let j = 0; j < cells[i].length; j += 1) {
       if (
         cells[i][j].value === CellValue.bomb &&
-        cells[i][j].state !== CellState.open
+        cells[i][j].state !== CellState.flagged
       ) {
         return false;
       }
