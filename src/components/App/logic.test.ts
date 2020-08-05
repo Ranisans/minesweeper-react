@@ -10,8 +10,8 @@ import {
   isAllBombMarked,
 } from "./logic";
 
-const rows = 4;
-const cols = 4;
+const rows = 9;
+const cols = 9;
 
 describe("game field generator", () => {
   let cells: Cell[][];
@@ -61,12 +61,6 @@ describe("game field generator", () => {
     expect(newCells[row][col].state).toBe(CellState.flagged);
   });
   it("should open adjacent empty cells", () => {
-    const adjoiningCells = [
-      [-1, 0],
-      [0, -1],
-      [0, 1],
-      [1, 0],
-    ];
     const newCells: Cell[][] = JSON.parse(JSON.stringify(cells));
     let row = -1;
     let column = -1;
@@ -81,18 +75,17 @@ describe("game field generator", () => {
     }
     if (row >= 0 && column >= 0) {
       openAllAdjacentEmptyCells(newCells, row, column);
-      for (let i = 0; i < adjoiningCells.length; i += 1) {
-        const [addX, addY] = adjoiningCells[i];
-        if (
-          row + addX >= 0 &&
-          row + addX < newCells.length &&
-          column + addY >= 0 &&
-          column + addY < newCells[row + addX].length &&
-          newCells[row + addX][column + addY].value === CellValue.none
-        ) {
-          expect(newCells[row + addX][column + addY].state).toBe(
-            CellState.open
-          );
+      for (let i = row - 1; i <= row + 1 && row < newCells.length; i += 1) {
+        if (i >= 0) {
+          for (
+            let j = column - 1;
+            j <= column + 1 && newCells[i].length;
+            j += 1
+          ) {
+            if (j >= 0) {
+              expect(newCells[i][j].state).toBe(CellState.open);
+            }
+          }
         }
       }
     }

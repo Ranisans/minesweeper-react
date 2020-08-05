@@ -82,29 +82,26 @@ export const openAllAdjacentEmptyCells = (
   col: number
 ): void => {
   const query: Position[] = [];
-  const adjoiningCells = [
-    [-1, 0],
-    [0, -1],
-    [0, 1],
-    [1, 0],
-  ];
   query.push({ row, col });
 
-  for (let i = 0; i < query.length; i += 1) {
-    const { row: x, col: y } = query[i];
+  for (let pos = 0; pos < query.length; pos += 1) {
+    const { row: x, col: y } = query[pos];
     // eslint-disable-next-line no-param-reassign
     cells[x][y].state = CellState.open;
-    for (let j = 0; j < adjoiningCells.length; j += 1) {
-      const [addX, addY] = adjoiningCells[j];
-      if (
-        x + addX >= 0 &&
-        x + addX < cells.length &&
-        y + addY >= 0 &&
-        y + addY < cells[x + addX].length &&
-        cells[x + addX][y + addY].state !== CellState.open &&
-        cells[x + addX][y + addY].value === CellValue.none
-      ) {
-        query.push({ row: x + addX, col: y + addY });
+    for (let i = x - 1; i <= x + 1 && i < cells.length; i += 1) {
+      if (i >= 0) {
+        for (let j = y - 1; j <= y + 1 && j < cells[i].length; j += 1) {
+          if (j >= 0) {
+            if (cells[i][j].state !== CellState.open) {
+              if (cells[i][j].value === CellValue.none) {
+                query.push({ row: i, col: j });
+              } else {
+                // eslint-disable-next-line no-param-reassign
+                cells[i][j].state = CellState.open;
+              }
+            }
+          }
+        }
       }
     }
   }
